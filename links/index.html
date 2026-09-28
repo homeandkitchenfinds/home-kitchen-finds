@@ -25,6 +25,9 @@
   .pcard.flash { outline:3px solid var(--terra); }
   .pcard img { width:100%; aspect-ratio:2/3; object-fit:cover; display:block; }
   .pcard .pad { padding:16px 18px 20px; text-align:center; }
+  .pnum { display:inline-block; font-size:.75rem; font-weight:700; color:var(--terra-dark); background:#FBEEDF; border-radius:20px; padding:2px 12px; margin-bottom:8px; letter-spacing:.05em; }
+  .feed-grid a { position:relative; }
+  .tnum { position:absolute; left:6px; bottom:6px; font-size:.68rem; font-weight:700; color:#fff; background:rgba(0,0,0,.55); border-radius:12px; padding:2px 8px; }
   .pcard h3 { font-size:1.1rem; margin-bottom:6px; }
   .pcard p { font-size:.9rem; color:var(--muted); margin-bottom:12px; }
   .amz { display:inline-block; background:#FF9900; color:#231F20; font-weight:700; padding:12px 30px; border-radius:10px; text-decoration:none; font-size:1rem; }
@@ -59,8 +62,11 @@
 </footer>
 
 <script>
-// Newest first. To add a new product: append {name, blurb, asin, img} to the END of this array
-// and drop the image into ../assets/. The grid and cards render automatically.
+// Newest first. PRODUCT NUMBERS ARE POSITIONAL AND PERMANENT: the entry at
+// index i displays as "No. i+1" (first entry = No. 1). To add a new product:
+// APPEND {name, blurb, asin, img} to the END of this array — never insert,
+// delete, or reorder entries, or every later number shifts. Drop the image
+// into ../assets/. The grid and cards render automatically.
 const PRODUCTS = [
   { name:"Over-the-Door Pantry Organizer", blurb:"Doubles your pantry storage without a remodel.", asin:"B0BX7PKKKQ", img:"pin-1.jpg" },
   { name:"Magnetic Kitchen Storage Rack", blurb:"Extra storage on any metal surface — no drilling.", asin:"B01LYD0QJZ", img:"pin-2.jpg" },
@@ -69,7 +75,7 @@ const PRODUCTS = [
   { name:"Wall-Mounted Pot Rack", blurb:"Turns cookware into kitchen decor, frees cabinets.", asin:"B07MLF234K", img:"pin-5.jpg" },
   { name:"Kitchen Baker's Rack", blurb:"Instant storage and style for small kitchens.", asin:"B09PFY63JQ", img:"pin-6.jpg" },
   { name:"Stackable Produce Baskets", blurb:"Keeps fruits and veggies fresh, visible, and off the counter.", asin:"B0BPSNPLY2", img:"pin-7.jpg" },
-  { name:"Pull-Out Cabinet Organizer", blurb:"Slides out so nothing hides in deep cabinets.", asin:"B0D86LPK6X", img:"pin-8.jpg" }
+  { name:"Pull-Out Cabinet Organizer", blurb:"Slides out so nothing hides in deep cabinets.", asin:"B09NQV4V27", img:"pin-9.jpg" }
 ];
 const TAG = "veda06c-20";
 const grid = document.getElementById('grid');
@@ -78,7 +84,7 @@ const cards = document.getElementById('cards');
   const idx = PRODUCTS.length - 1 - i;
   const a = document.createElement('a');
   a.href = '#p' + idx;
-  a.innerHTML = `<img src="../assets/${p.img}" alt="${p.name}" loading="lazy">`;
+  a.innerHTML = `<img src="../assets/${p.img}" alt="No. ${idx+1} — ${p.name}" loading="lazy"><span class="tnum">No. ${idx+1}</span>`;
   a.addEventListener('click', () => {
     setTimeout(() => {
       const c = document.getElementById('p' + idx);
@@ -92,8 +98,8 @@ const cards = document.getElementById('cards');
   const idx = PRODUCTS.indexOf(p);
   const d = document.createElement('div');
   d.className = 'pcard'; d.id = 'p' + idx;
-  d.innerHTML = `<img src="../assets/${p.img}" alt="${p.name}" loading="lazy">
-    <div class="pad"><h3>${p.name}</h3><p>${p.blurb}</p>
+  d.innerHTML = `<img src="../assets/${p.img}" alt="No. ${idx+1} — ${p.name}" loading="lazy">
+    <div class="pad"><div class="pnum">No. ${idx+1}</div><h3>${p.name}</h3><p>${p.blurb}</p>
     <a class="amz" href="https://www.amazon.com/dp/${p.asin}?tag=${TAG}" target="_blank" rel="nofollow sponsored noopener">View on Amazon</a></div>`;
   cards.appendChild(d);
 });
