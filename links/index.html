@@ -15,6 +15,12 @@
   .profile h1 { font-size:1.35rem; margin-bottom:4px; }
   .profile p { color:var(--muted); font-size:.95rem; max-width:420px; margin:0 auto; }
   .disclosure { background:#FFF7E8; border:1px solid #EBD9B4; border-radius:10px; padding:10px 14px; font-size:.8rem; color:var(--muted); margin:6px 14px 18px; text-align:center; }
+  .jump { display:flex; gap:8px; justify-content:center; align-items:center; margin:0 14px 16px; }
+  .jump label { font-size:.85rem; color:var(--muted); font-weight:600; white-space:nowrap; }
+  .jump input { width:76px; padding:10px 8px; font-size:1rem; border:2px solid #E4D6C2; border-radius:10px; background:#fff; color:var(--ink); text-align:center; }
+  .jump input:focus { outline:none; border-color:var(--terra); }
+  .jump button { padding:10px 22px; font-size:.95rem; font-weight:700; color:#fff; background:var(--terra); border:none; border-radius:10px; cursor:pointer; }
+  .jump button:active { background:var(--terra-dark); }
   .feed-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; padding:0 3px; }
   .feed-grid a { display:block; aspect-ratio:2/3; overflow:hidden; background:#eee; }
   .feed-grid img { width:100%; height:100%; object-fit:cover; display:block; }
@@ -46,6 +52,14 @@
 </div>
 
 <div class="wrap"><div class="disclosure">As an Amazon Associate, Home &amp; Kitchen Finds earns from qualifying purchases made through links on this page. #ad</div></div>
+
+<div class="wrap">
+  <form class="jump" id="jumpform">
+    <label for="jumpnum">Jump to product No.</label>
+    <input id="jumpnum" type="number" min="1" inputmode="numeric" placeholder="#">
+    <button type="submit">Go</button>
+  </form>
+</div>
 
 <div class="wrap">
   <div class="feed-grid" id="grid"><!-- tiles injected --></div>
@@ -102,6 +116,24 @@ const cards = document.getElementById('cards');
     <div class="pad"><div class="pnum">No. ${idx+1}</div><h3>${p.name}</h3><p>${p.blurb}</p>
     <a class="amz" href="https://www.amazon.com/dp/${p.asin}?tag=${TAG}" target="_blank" rel="nofollow sponsored noopener">View on Amazon</a></div>`;
   cards.appendChild(d);
+});
+// Jump-to-number: type a product No. -> smooth-scroll to its card + flash it.
+const jumpForm = document.getElementById('jumpform');
+const jumpNum = document.getElementById('jumpnum');
+jumpNum.max = PRODUCTS.length;
+jumpForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const n = parseInt(jumpNum.value, 10);
+  if (!n || n < 1 || n > PRODUCTS.length) {
+    jumpNum.style.borderColor = '#C0392B';
+    setTimeout(() => jumpNum.style.borderColor = '', 1200);
+    return;
+  }
+  const c = document.getElementById('p' + (n - 1));
+  c.scrollIntoView({ behavior:'smooth', block:'center' });
+  c.classList.add('flash');
+  setTimeout(() => c.classList.remove('flash'), 1600);
+  jumpNum.blur();
 });
 </script>
 </body>
