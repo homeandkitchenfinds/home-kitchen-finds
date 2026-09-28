@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop Our Feed — Home &amp; Kitchen Finds</title>
+<meta name="description" content="Shop the products featured in our Instagram Reels and posts. Tap any post to find it on Amazon.">
+<style>
+  :root { --cream:#FAF6EF; --terra:#C65D3B; --terra-dark:#A34A2D; --ink:#2B2118; --muted:#7A6A5C; --card:#FFFFFF; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--cream); color:var(--ink); line-height:1.5; }
+  .wrap { max-width:640px; margin:0 auto; padding:0 14px; }
+  .profile { text-align:center; padding:34px 14px 18px; }
+  .profile img.logo { width:92px; height:92px; border-radius:50%; object-fit:cover; border:3px solid var(--terra); margin-bottom:12px; }
+  .profile h1 { font-size:1.35rem; margin-bottom:4px; }
+  .profile p { color:var(--muted); font-size:.95rem; max-width:420px; margin:0 auto; }
+  .disclosure { background:#FFF7E8; border:1px solid #EBD9B4; border-radius:10px; padding:10px 14px; font-size:.8rem; color:var(--muted); margin:6px 14px 18px; text-align:center; }
+  .feed-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; padding:0 3px; }
+  .feed-grid a { display:block; aspect-ratio:2/3; overflow:hidden; background:#eee; }
+  .feed-grid img { width:100%; height:100%; object-fit:cover; display:block; }
+  .feed-grid a:active img { opacity:.7; }
+  .shop { padding:34px 0 10px; }
+  .shop h2 { text-align:center; font-size:1.25rem; margin-bottom:18px; }
+  .pcard { background:var(--card); border-radius:14px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.06); margin-bottom:22px; scroll-margin-top:16px; }
+  .pcard.flash { outline:3px solid var(--terra); }
+  .pcard img { width:100%; aspect-ratio:2/3; object-fit:cover; display:block; }
+  .pcard .pad { padding:16px 18px 20px; text-align:center; }
+  .pcard h3 { font-size:1.1rem; margin-bottom:6px; }
+  .pcard p { font-size:.9rem; color:var(--muted); margin-bottom:12px; }
+  .amz { display:inline-block; background:#FF9900; color:#231F20; font-weight:700; padding:12px 30px; border-radius:10px; text-decoration:none; font-size:1rem; }
+  .amz:hover { background:#e88b00; }
+  footer { padding:10px 0 44px; font-size:.8rem; color:var(--muted); text-align:center; }
+  footer p { max-width:520px; margin:0 auto 8px; padding:0 14px; }
+  footer a { color:var(--terra-dark); }
+</style>
+</head>
+<body>
+
+<div class="wrap profile">
+  <img class="logo" src="../assets/logo.jpg" alt="Home and Kitchen Finds logo">
+  <h1>Home &amp; Kitchen Finds</h1>
+  <p>Shop our Reels &amp; posts — tap any post below to find the product on Amazon.</p>
+</div>
+
+<div class="wrap"><div class="disclosure">As an Amazon Associate, Home &amp; Kitchen Finds earns from qualifying purchases made through links on this page. #ad</div></div>
+
+<div class="wrap">
+  <div class="feed-grid" id="grid"><!-- tiles injected --></div>
+</div>
+
+<div class="wrap shop">
+  <h2>Shop the products</h2>
+  <div id="cards"><!-- cards injected --></div>
+</div>
+
+<footer>
+  <p>As an Amazon Associate, Home &amp; Kitchen Finds earns from qualifying purchases. #ad</p>
+  <p><a href="../">← Back to homeandkitchenfinds</a> · <a href="https://www.pinterest.com/homeandkitchenfinds7/" target="_blank" rel="noopener">Pinterest</a></p>
+</footer>
+
+<script>
+// Newest first. To add a new product: append {name, blurb, asin, img} to the END of this array
+// and drop the image into ../assets/. The grid and cards render automatically.
+const PRODUCTS = [
+  { name:"Over-the-Door Pantry Organizer", blurb:"Doubles your pantry storage without a remodel.", asin:"B0BX7PKKKQ", img:"pin-1.jpg" },
+  { name:"Magnetic Kitchen Storage Rack", blurb:"Extra storage on any metal surface — no drilling.", asin:"B01LYD0QJZ", img:"pin-2.jpg" },
+  { name:"Airtight Food Storage Containers", blurb:"Keeps dry goods fresh for weeks, stacks neatly.", asin:"B09MXL1W9H", img:"pin-3.jpg" },
+  { name:"2-Tier Under Sink Organizer", blurb:"Tames the cluttered cabinet under your sink.", asin:"B0CHNL1JYB", img:"pin-4.jpg" },
+  { name:"Wall-Mounted Pot Rack", blurb:"Turns cookware into kitchen decor, frees cabinets.", asin:"B07MLF234K", img:"pin-5.jpg" },
+  { name:"Kitchen Baker's Rack", blurb:"Instant storage and style for small kitchens.", asin:"B09PFY63JQ", img:"pin-6.jpg" },
+  { name:"Stackable Produce Baskets", blurb:"Keeps fruits and veggies fresh, visible, and off the counter.", asin:"B0BPSNPLY2", img:"pin-7.jpg" },
+  { name:"Pull-Out Cabinet Organizer", blurb:"Slides out so nothing hides in deep cabinets.", asin:"B0D86LPK6X", img:"pin-8.jpg" }
+];
+const TAG = "veda06c-20";
+const grid = document.getElementById('grid');
+const cards = document.getElementById('cards');
+[...PRODUCTS].reverse().forEach((p, i) => {
+  const idx = PRODUCTS.length - 1 - i;
+  const a = document.createElement('a');
+  a.href = '#p' + idx;
+  a.innerHTML = `<img src="../assets/${p.img}" alt="${p.name}" loading="lazy">`;
+  a.addEventListener('click', () => {
+    setTimeout(() => {
+      const c = document.getElementById('p' + idx);
+      c.classList.add('flash');
+      setTimeout(() => c.classList.remove('flash'), 1600);
+    }, 50);
+  });
+  grid.appendChild(a);
+});
+[...PRODUCTS].reverse().forEach((p) => {
+  const idx = PRODUCTS.indexOf(p);
+  const d = document.createElement('div');
+  d.className = 'pcard'; d.id = 'p' + idx;
+  d.innerHTML = `<img src="../assets/${p.img}" alt="${p.name}" loading="lazy">
+    <div class="pad"><h3>${p.name}</h3><p>${p.blurb}</p>
+    <a class="amz" href="https://www.amazon.com/dp/${p.asin}?tag=${TAG}" target="_blank" rel="nofollow sponsored noopener">View on Amazon</a></div>`;
+  cards.appendChild(d);
+});
+</script>
+</body>
+</html>
